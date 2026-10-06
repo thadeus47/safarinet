@@ -2,6 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { SoundControl } from "@/components/audio/SoundControl";
+import { OVERVIEW_SCENE } from "@/lib/audio/soundscapes";
 import { detectMode, writeModeCookie } from "@/lib/device/detectMode";
 import { RegionPanel } from "./RegionPanel";
 import type { DestinationCard, MapMode, MapRegion } from "./types";
@@ -68,15 +70,18 @@ export function MapExperience({
           <h1 className="font-display text-xl text-sand sm:text-2xl">Safarinet</h1>
           <p className="text-xs text-sand/70 sm:text-sm">Explore Kenya. Tap a region to fly in.</p>
         </div>
-        {mode && (
-          <button
-            type="button"
-            onClick={switchMode}
-            className="pointer-events-auto rounded-full bg-night/70 px-4 py-2 text-xs font-medium text-sand backdrop-blur hover:bg-night/90"
-          >
-            {mode === "3d" ? "Switch to lite map" : "Switch to 3D map"}
-          </button>
-        )}
+        <div className="flex flex-col items-end gap-2">
+          <SoundControl scene={selected?.slug ?? OVERVIEW_SCENE} />
+          {mode && (
+            <button
+              type="button"
+              onClick={switchMode}
+              className="pointer-events-auto rounded-full bg-night/70 px-4 py-2 text-xs font-medium text-sand backdrop-blur hover:bg-night/90"
+            >
+              {mode === "3d" ? "Switch to lite map" : "Switch to 3D map"}
+            </button>
+          )}
+        </div>
       </header>
 
       {selected && (

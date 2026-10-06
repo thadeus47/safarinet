@@ -37,7 +37,7 @@ export function RegionPanel({
     <aside
       ref={panel}
       aria-label={`${region.name} experiences`}
-      className="absolute inset-x-0 bottom-0 max-h-[62dvh] overflow-y-auto rounded-t-3xl bg-sand p-5 text-ink shadow-2xl sm:inset-y-4 sm:right-4 sm:left-auto sm:max-h-none sm:w-[400px] sm:rounded-3xl"
+      className="absolute inset-x-0 bottom-0 max-h-[62dvh] overflow-y-auto rounded-t-3xl bg-sand p-5 text-ink shadow-2xl sm:top-32 sm:bottom-4 sm:right-4 sm:left-auto sm:max-h-none sm:w-[400px] sm:rounded-3xl"
     >
       <div className="flex items-start justify-between gap-4">
         <div>

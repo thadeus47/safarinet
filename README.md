@@ -31,6 +31,31 @@ Copy `.env.example` to `.env.local` to override defaults.
 
 Seed partners and prices are demo placeholders, not real operators or quotes.
 
+## Ambient sound
+
+Each map scene (the Kenya overview and every region) has its own soundscape, and the map crossfades between them as you fly around. Sound stays off until the visitor taps **Enter with sound**, because browsers block autoplay audio. After that a mute toggle stays visible.
+
+| Piece | Where |
+| --- | --- |
+| Scene → soundscape list | `src/lib/audio/soundscapes.ts` |
+| Crossfading engine (Web Audio) | `src/lib/audio/AmbientEngine.ts` |
+| Generated stand-in layers: wind, surf, insects, birds | `src/lib/audio/synth.ts` |
+| Enter / mute control | `src/components/audio/SoundControl.tsx` |
+
+The current sounds are **generated in code** as stand-ins. They download nothing, but they're impressions, not real Kenyan wildlife.
+
+### Adding real recordings
+
+1. Get recordings you have the rights to use commercially on the web:
+   - Best: record or commission recordings in each region from Kenyan field recordists, and buy the rights outright.
+   - Good: licensed libraries whose licence covers web streaming.
+   - Free: Freesound with the licence filter set to Creative Commons 0.
+   - Avoid: YouTube rips and anything licensed for non-commercial use only.
+2. Edit each one into a seamless 60–120 s loop, levelled consistently across regions, and export as AAC or Opus at about 96 kbps (roughly 1 MB per minute).
+3. Upload to the CDN, then set `recording: { src, credit }` on that scene in `soundscapes.ts`.
+
+Recordings are fetched only after sound is switched on. If one fails to load, that scene falls back to its generated sound.
+
 ## Next steps (from the build plan)
 
 1. Payload CMS + Neon Postgres, replacing `src/lib/content/seed.ts`
