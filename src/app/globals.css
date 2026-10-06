@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sand: #f6efe1;
+  --color-ink: #1d2420;
+  --color-night: #0d1712;
+  --color-acacia: #c2621c;
+  --color-leaf: #3d5e34;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+}
+
+/* Region pins, shared by the 3D scene (drei Html) and the lite map (MapLibre markers). */
+.pin {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem 0.3rem 0.35rem;
+  border-radius: 999px;
+  background: rgb(13 23 18 / 0.78);
+  color: var(--color-sand);
+  font: 500 0.8rem/1.1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, background 0.2s ease;
+  /* Comfortable tap target on phones. */
+  min-height: 2.25rem;
+}
+.pin:hover {
+  transform: translateY(-2px);
+}
+.pin:focus-visible {
+  outline: 2px solid var(--color-acacia);
+  outline-offset: 2px;
+}
+.pin-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 999px;
+  background: var(--color-acacia);
+  box-shadow: 0 0 0 4px rgb(194 98 28 / 0.3);
+}
+.pin-soon .pin-dot {
+  background: #8b8f86;
+  box-shadow: 0 0 0 4px rgb(139 143 134 / 0.25);
+}
+.pin-label {
+  display: flex;
+  flex-direction: column;
+}
+.pin-soon-tag {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+.pin-selected {
+  background: var(--color-acacia);
+}
+.pin-selected .pin-dot {
+  background: var(--color-sand);
+}
