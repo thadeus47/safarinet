@@ -44,3 +44,6 @@ next-env.d.ts
 
 # MapLibre worker, copied on postinstall
 /public/vendor/
+
+# Planning docs, kept local only
+/docs/

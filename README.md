@@ -2,8 +2,7 @@
 
 An immersive 3D map of Kenya where travellers explore regions and book local experiences, paying by card or M-Pesa.
 
-- Product requirements: [docs/PRD.md](docs/PRD.md)
-- Technical build plan: [docs/TECHNICAL-PLAN.md](docs/TECHNICAL-PLAN.md)
+Product requirements and the technical build plan live in `docs/`, which is kept local and not committed.
 
 ## Run it
 
