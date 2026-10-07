@@ -57,10 +57,3 @@ The current sounds are **generated in code** as stand-ins. They download nothing
 Recordings are fetched only after sound is switched on. If one fails to load, that scene falls back to its generated sound.
 
 ## Next steps (from the build plan)
-
-1. Payload CMS + Neon Postgres, replacing `src/lib/content/seed.ts`
-2. Paystack deposits, booking state machine and the Vercel Workflow 24-hour confirm-or-refund timer
-3. Partner notifications (Resend, WhatsApp) with signed confirm/decline links
-4. Save and share itineraries, contact capture
-5. Real terrain: DEM → glTF pipeline in `scripts/terrain/`
-6. PostHog events, Sentry, Playwright end-to-end tests
