@@ -5,21 +5,20 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getExperiencesByRegion, getRegion, getRegions } from "@/lib/content/repo";
 import { toCard } from "@/lib/content/view";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return getRegions().map((r) => ({ region: r.slug }));
+// Regions added in the admin after a deploy render on first request, then are cached.
+export async function generateStaticParams() {
+  return (await getRegions()).map((r) => ({ region: r.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/[region]">): Promise<Metadata> {
-  const region = getRegion((await params).region);
+  const region = await getRegion((await params).region);
   return region ? { title: `${region.name} experiences · Safarinet`, description: region.description } : {};
 }
 
 export default async function RegionPage({ params }: PageProps<"/[region]">) {
-  const region = getRegion((await params).region);
+  const region = await getRegion((await params).region);
   if (!region) notFound();
-  const cards = region.status === "live" ? getExperiencesByRegion(region.slug).map(toCard) : [];
+  const cards = region.status === "live" ? (await getExperiencesByRegion(region.slug)).map(toCard) : [];
 
   return (
     <>

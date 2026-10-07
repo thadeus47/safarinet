@@ -47,3 +47,6 @@ next-env.d.ts
 
 # Planning docs, kept local only
 /docs/
+
+# Local credentials notes, never commit
+env.txt

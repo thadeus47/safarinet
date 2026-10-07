@@ -3,24 +3,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExperienceMedia } from "@/components/cards/ExperienceMedia";
 import { SiteHeader } from "@/components/SiteHeader";
-import { getAllExperiences, getExperience, getRegion } from "@/lib/content/repo";
+import { getAllExperiences, getExperience, getRegion, getRegions } from "@/lib/content/repo";
 import { TYPE_LABELS } from "@/lib/content/view";
 import { formatKes, formatUsd } from "@/lib/money";
 import { fromPricePerPerson } from "@/lib/pricing/quote";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  // Only live regions get bookable pages.
-  return getAllExperiences()
-    .filter((e) => getRegion(e.regionSlug)?.status === "live")
+export async function generateStaticParams() {
+  const regions = await getRegions();
+  const live = new Set(regions.filter((r) => r.status === "live").map((r) => r.slug));
+  return (await getAllExperiences())
+    .filter((e) => live.has(e.regionSlug))
     .map((e) => ({ region: e.regionSlug, experience: e.slug }));
 }
 
 async function load(params: PageProps<"/[region]/[experience]">["params"]) {
   const { region: regionSlug, experience: slug } = await params;
-  const region = getRegion(regionSlug);
-  const experience = getExperience(regionSlug, slug);
+  const [region, experience] = await Promise.all([getRegion(regionSlug), getExperience(regionSlug, slug)]);
   if (!region || region.status !== "live" || !experience) return null;
   return { region, experience };
 }

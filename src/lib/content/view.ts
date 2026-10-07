@@ -41,12 +41,12 @@ export function toMapRegion(r: RegionWithStatus): MapRegion {
   };
 }
 
-export function getMapData() {
-  const regions = getRegions();
+export async function getMapData() {
+  const regions = await getRegions();
   const cardsByRegion: Record<string, DestinationCard[]> = {};
   for (const r of regions) {
     // Coming-soon regions show no cards, even if some partners are already signed.
-    cardsByRegion[r.slug] = r.status === "live" ? getExperiencesByRegion(r.slug).map(toCard) : [];
+    cardsByRegion[r.slug] = r.status === "live" ? (await getExperiencesByRegion(r.slug)).map(toCard) : [];
   }
   return { regions: regions.map(toMapRegion), cardsByRegion };
 }

@@ -7,13 +7,28 @@ Product requirements and the technical build plan live in `docs/`, which is kept
 ## Run it
 
 ```bash
-npm install        # also copies the MapLibre worker into public/vendor
-npm run dev        # http://localhost:3000
-npm test           # pricing unit tests
-npm run build
+npm install          # also copies the MapLibre worker into public/vendor
+cp .env.example .env.local   # then set DATABASE_URL (Neon, pooled) and PAYLOAD_SECRET
+npm run migrate      # apply database migrations to Neon
+npm run seed         # optional: load the demo regions, partners and experiences
+npm run dev          # site at http://localhost:3000, admin at /admin
+npm test             # pricing unit tests
+npm run build        # needs DATABASE_URL: pages are generated from Payload content
 ```
 
-Copy `.env.example` to `.env.local` to override defaults.
+On the first visit to `/admin`, Payload asks you to create the first admin user.
+
+### Changing the content model
+
+Collections live in `src/collections/`. After changing one:
+
+```bash
+npm run migrate:create <name>   # writes a migration to src/migrations/
+npm run migrate                 # applies it
+npm run generate:types          # refreshes src/payload-types.ts
+```
+
+The database never auto-pushes schema changes (`push: false`), so every environment changes only through migrations.
 
 ## What's built (Foundations + first map slice)
 
@@ -23,13 +38,15 @@ Copy `.env.example` to `.env.local` to override defaults.
 | Region pins | `src/components/map3d/RegionPins.tsx` | DOM buttons projected from 3D each frame, so they are tappable and accessible |
 | Lite mode (flat 2D map) | `src/components/maplite/LiteMap.tsx` | MapLibre + OpenFreeMap; three.js is never downloaded |
 | Mode detection and toggle | `src/lib/device/detectMode.ts` | Save-Data, slow connection, low memory, no WebGL or a low GPU tier → lite; the manual choice is stored in a cookie |
-| Region hub panel and pages | `src/components/map/RegionPanel.tsx`, `src/app/[region]` | Regions with fewer than 5 signed partners show "coming soon" |
-| Experience pages | `src/app/[region]/[experience]` | Static; media are placeholders until Cloudinary |
-| Request-to-book form with live pricing | `src/app/book/...`, `src/components/booking/BookingForm.tsx` | Payments not connected yet |
+| Region hub panel and pages | `src/components/map/RegionPanel.tsx`, `src/app/(site)/[region]` | Regions with fewer than 5 signed partners show "coming soon" |
+| Experience pages | `src/app/(site)/[region]/[experience]` | Static; media are placeholders until Cloudinary |
+| Request-to-book form with live pricing | `src/app/(site)/book/...`, `src/components/booking/BookingForm.tsx` | Payments not connected yet |
 | Pricing engine | `src/lib/pricing/quote.ts` | Per-person / per-group, seasons (including year-wrap), fees; unit-tested |
-| Content layer | `src/lib/content/` | Typed seed data behind `repo.ts`; swap for Payload's local API |
+| Payload CMS admin | `/admin`, `src/payload.config.ts`, `src/collections/` | Regions, partners, experiences (pricing rules and fees), staff users. Partners are readable by staff only |
+| Neon Postgres | `@payloadcms/db-postgres`, `src/migrations/` | Schema managed by migrations |
+| Content layer | `src/lib/content/repo.ts` | Reads Payload through its local API and maps documents to domain types. Saving in the admin revalidates the site |
 
-Seed partners and prices are demo placeholders, not real operators or quotes.
+Seed partners and prices (`src/seed/data.ts`, loaded by `npm run seed`) are demo placeholders, not real operators or quotes.
 
 ## Ambient sound
 

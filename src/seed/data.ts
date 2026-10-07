@@ -1,7 +1,7 @@
-import type { Experience, Partner, Region } from "./types";
+import type { Experience, Partner, Region } from "@/lib/content/types";
 
-// Demo content for local development. Partner names and prices are placeholders,
-// not real operators or quotes. Replace with Payload CMS data before launch.
+// Demo content loaded into Payload by `npm run seed`. Partner names and prices are
+// placeholders, not real operators or quotes. Edit real content in /admin instead.
 
 export const regions: Region[] = [
   {
