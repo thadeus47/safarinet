@@ -34,11 +34,14 @@ The database never auto-pushes schema changes (`push: false`), so every environm
 
 | Area | Where | Notes |
 | --- | --- | --- |
+| Landing page | `src/app/(site)/page.tsx`, `src/components/landing/` | Public front door at `/`: hero with a Kenya preview of every region, how it works, regions, top-rated experiences. Content comes from the CMS |
+| Traveler accounts and the map behind sign-in | `src/app/(site)/(auth)/`, `src/lib/auth/session.ts`, `src/collections/Travelers.ts` | `/register` and `/signin` use Payload auth (a `travelers` collection, separate from staff `users`). The map lives at `/explore` and sends signed-out visitors to sign in, then back |
 | 3D terrain map, slow drift, GSAP fly-in | `src/components/map3d/` | React Three Fiber. Terrain is procedural (`src/lib/terrain/procedural.ts`) until the DEM pipeline lands |
-| Region pins | `src/components/map3d/RegionPins.tsx` | DOM buttons projected from 3D each frame, so they are tappable and accessible |
+| Map pins | `src/components/map3d/MapPins.tsx` | Region and place pins are DOM buttons projected from 3D each frame, so they are tappable and accessible |
 | Lite mode (flat 2D map) | `src/components/maplite/LiteMap.tsx` | MapLibre + OpenFreeMap; three.js is never downloaded |
 | Mode detection and toggle | `src/lib/device/detectMode.ts` | Save-Data, slow connection, low memory, no WebGL or a low GPU tier → lite; the manual choice is stored in a cookie |
-| Region hub panel and pages | `src/components/map/RegionPanel.tsx`, `src/app/(site)/[region]` | Regions with fewer than 5 signed partners show "coming soon" |
+| Region zoom and place markers | `src/components/map/MapExperience.tsx`, `src/components/map3d/CameraRig.tsx` | Selecting a region zooms to fit its experiences and marks each one on the map; selecting a place (on the map or in the list) flies to it and shows its details. Escape steps back out |
+| Region hub panel and pages | `src/components/map/RegionPanel.tsx`, `src/app/(site)/[region]` | Lists a region's places, or one place's details with booking links. Regions with fewer than 5 signed partners show "coming soon" |
 | Experience pages | `src/app/(site)/[region]/[experience]` | Static; media are placeholders until Cloudinary |
 | Request-to-book form with live pricing | `src/app/(site)/book/...`, `src/components/booking/BookingForm.tsx` | Payments not connected yet |
 | Pricing engine | `src/lib/pricing/quote.ts` | Per-person / per-group, seasons (including year-wrap), fees; unit-tested |

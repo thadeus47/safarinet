@@ -21,10 +21,15 @@ export function experienceHref(e: Experience): string {
 
 export function toCard(e: Experience): DestinationCard {
   return {
+    id: e.slug,
     href: experienceHref(e),
+    bookHref: `/book/${e.regionSlug}/${e.slug}`,
     title: e.title,
     summary: e.summary,
     typeLabel: TYPE_LABELS[e.type],
+    location: e.location,
+    durationHours: e.durationHours,
+    rating: e.rating,
     distanceKm: distanceKm(NAIROBI, e.location),
     fromKes: fromPricePerPerson(e),
   };

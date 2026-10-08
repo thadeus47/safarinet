@@ -2,20 +2,20 @@
 
 import { Canvas } from "@react-three/fiber";
 import { useRef } from "react";
-import type { MapRegion } from "@/components/map/types";
+import type { MapFocus, MapPin } from "@/components/map/types";
 import { TERRAIN_DEPTH, TERRAIN_WIDTH } from "@/lib/geo";
-import { CameraRig } from "./CameraRig";
-import { PinOverlay, PinProjector } from "./RegionPins";
+import { CameraRig, FramingOffset } from "./CameraRig";
+import { PinOverlay, PinProjector } from "./MapPins";
 import { Terrain } from "./Terrain";
 
 export default function Scene({
-  regions,
-  selected,
-  onSelect,
+  pins,
+  focus,
+  panelOpen,
 }: {
-  regions: MapRegion[];
-  selected: MapRegion | null;
-  onSelect: (slug: string) => void;
+  pins: MapPin[];
+  focus: MapFocus;
+  panelOpen: boolean;
 }) {
   const pinRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
@@ -25,7 +25,7 @@ export default function Scene({
         frameloop="demand"
         // Capped pixel ratio keeps mid-range phones near 30 fps (see performance budgets).
         dpr={[1, 1.5]}
-        camera={{ fov: 40, near: 0.5, far: 500, position: [0, 95, 100] }}
+        camera={{ fov: 40, near: 0.2, far: 500, position: [0, 95, 100] }}
         gl={{ antialias: true, powerPreference: "high-performance" }}
         aria-label="3D map of Kenya"
       >
@@ -39,10 +39,11 @@ export default function Scene({
           <planeGeometry args={[TERRAIN_WIDTH * 4, TERRAIN_DEPTH * 4]} />
           <meshStandardMaterial color="#173c53" roughness={0.6} />
         </mesh>
-        <PinProjector regions={regions} pinRefs={pinRefs} />
-        <CameraRig selected={selected} />
+        <PinProjector pins={pins} pinRefs={pinRefs} />
+        <CameraRig focus={focus} />
+        <FramingOffset panelOpen={panelOpen} />
       </Canvas>
-      <PinOverlay regions={regions} selected={selected} onSelect={onSelect} pinRefs={pinRefs} />
+      <PinOverlay pins={pins} pinRefs={pinRefs} />
     </div>
   );
 }

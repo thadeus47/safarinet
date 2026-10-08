@@ -7,7 +7,7 @@ export function SiteHeader() {
         <Link href="/" className="font-display text-xl">
           Safarinet
         </Link>
-        <Link href="/" className="text-sm text-ink/70 hover:text-ink">
+        <Link href="/explore" className="text-sm text-ink/70 hover:text-ink">
           Back to the map
         </Link>
       </div>
